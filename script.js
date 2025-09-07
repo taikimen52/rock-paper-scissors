@@ -17,10 +17,22 @@ const getComputerChoice = () => hands[Math.floor(Math.random() * 3)];
 // ユーザー入力の値を取得
 const getPlayerChoice =() => prompt("じゃんけんぽん").toLowerCase();
 
-// ユーザー入力とコンピューター入力を比較
+//プレイヤが勝った時、プレイヤのスコアを加点し、勝敗と現スコアをコンソールに表示
+function playerWins(){
+    playerScore += 1;
+    console.log("Player wins. Your Score: "+ playerScore +"CP Score: "+ computerScore);
+}
+
+//CPが勝った時、CPのスコアを加点し、勝敗と現スコアをコンソールに表示
+function comWins(){
+    computerScore += 1;
+    console.log("Computer wins. Your Score: "+ playerScore +"CP Score: "+ computerScore);
+}
+
+// ユーザー入力とコンピューター入力を比較、勝敗を判定
 function playRound(com, player){
     if(com === player){
-        console.log("aiko");
+        console.log("Draw");
     } else if(com === "rock" && player === "scissors"){
         comWins();
     } else if(com === "rock" && player === "paper"){
@@ -38,20 +50,11 @@ function playRound(com, player){
     }
 }
 
-function playerWins(){
-    playerScore += 1;
-    console.log("Player wins. Your Score: "+ playerScore +"CP Score: "+ computerScore);
-}
-
-function comWins(){
-    computerScore += 1;
-    console.log("Computer wins. Your Score: "+ playerScore +"CP Score: "+ computerScore);
-}
-
+//指定回数じゃんけんを繰り返す。毎回プレイヤーとCPの選択を更新する。
+//後々、回数はユーザー入力を受け付けるよう、引数として準備
 function playGame(times){
     for(let i = 0; i < times; i++){
         playerChoice = getPlayerChoice();
-        console.log(playerChoice);
         computerChoice = getComputerChoice();
         playRound(computerChoice, playerChoice);
     }
