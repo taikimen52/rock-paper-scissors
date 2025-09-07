@@ -13,11 +13,9 @@ let computerScore = 0;
 
 //コンピュータの入力を取得する
 const getComputerChoice = () => hands[Math.floor(Math.random() * 3)];
-let computerChoice = getComputerChoice();
 
 // ユーザー入力の値を取得
-const getPlayerChoice =() => prompt("じゃんけんぽん");
-let playerChoice = getPlayerChoice();
+const getPlayerChoice =() => prompt("じゃんけんぽん").toLowerCase();
 
 // ユーザー入力とコンピューター入力を比較
 function playRound(com, player){
@@ -50,4 +48,14 @@ function comWins(){
     console.log("Computer wins. Your Score: "+ playerScore +"CP Score: "+ computerScore);
 }
 
-playRound(computerChoice, playerChoice);
+function playGame(times){
+    for(let i = 0; i < times; i++){
+        playerChoice = getPlayerChoice();
+        console.log(playerChoice);
+        computerChoice = getComputerChoice();
+        playRound(computerChoice, playerChoice);
+    }
+
+}
+
+playGame(5);
