@@ -1,64 +1,83 @@
-/* Pseudocode
-コンピュータの入力を取得する
-プレイヤーの入力を取得する（prompt関数を使用する）
-コンピュータとプレイヤーの入力を比較し、勝ち、負け、あいこの判定を行う
-買った方に得点を1追加する
-結果を表示する
-*/
-
+//じゃんけんの手を配列に格納（CPの手決定用）
 const hands = ["rock", "paper", "scissors"]
 
+//必要なグローバル変数の定義
 let playerScore = 0;
 let computerScore = 0;
+let playerChoice ="";
+let comChoice ="";
+let winner ="";
 
 //コンピュータの入力を取得する
-const getComputerChoice = () => hands[Math.floor(Math.random() * 3)];
-
-// ユーザー入力の値を取得
-const getPlayerChoice =() => prompt("じゃんけんぽん").toLowerCase();
-
-//プレイヤが勝った時、プレイヤのスコアを加点し、勝敗と現スコアをコンソールに表示
-function playerWins(){
-    playerScore += 1;
-    console.log("Player wins. Your Score: "+ playerScore +"CP Score: "+ computerScore);
-}
-
-//CPが勝った時、CPのスコアを加点し、勝敗と現スコアをコンソールに表示
-function comWins(){
-    computerScore += 1;
-    console.log("Computer wins. Your Score: "+ playerScore +"CP Score: "+ computerScore);
-}
+const getComChoice = () => hands[Math.floor(Math.random() * 3)];
 
 // ユーザー入力とコンピューター入力を比較、勝敗を判定
 function playRound(com, player){
     if(com === player){
-        console.log("Draw");
+        winner = "";
+        printResult();
     } else if(com === "rock" && player === "scissors"){
-        comWins();
+        winner = "com";
+        printResult();
     } else if(com === "rock" && player === "paper"){
-        playerWins();
+        winner = "player";
+        printResult();
     } else if(com === "paper" && player === "scissors"){
-        playerWins();
+        winner = "player";
+        printResult();
     } else if(com === "paper" && player === "rock"){
-        comWins();
+        winner = "com";
+        printResult();
     } else if(com === "scissors" && player === "rock"){
-        playerWins();
-    } else if(com === "scisors" && player === "paper"){
-        comWins();
+        winner = "player";
+        printResult();
+    } else if(com === "scissors" && player === "paper"){
+        winner = "com";
+        printResult();
+    }
+}
+
+const div = document.querySelector(".result");
+
+// 結果の表示とスコアの加点
+function printResult() {
+    // 毎回クリア＆メッセージを上書き
+    if (winner === "player") {
+        playerScore += 1;
+        div.innerHTML = `
+            <p>ママは ${comChoice}！ きみの勝ちだね。<br>
+            きみの得点：${playerScore}点 ママの得点：${computerScore}点</p>`;
+    } else if (winner === "com") {
+        computerScore += 1;
+        div.innerHTML = `
+            <p>ママは ${comChoice}！ ママの勝ちだね。<br>
+            きみの得点：${playerScore}点 ママの得点：${computerScore}点</p>`;
     } else {
-       console.log("入力が正しくありません");
+        div.innerHTML = `<p>あいこだよ、もう一回やってみよう！</p>`;
     }
 }
 
-//指定回数じゃんけんを繰り返す。毎回プレイヤーとCPの選択を更新する。
-//後々、回数はユーザー入力を受け付けるよう、引数として準備
-function playGame(times){
-    for(let i = 0; i < times; i++){
-        playerChoice = getPlayerChoice();
-        computerChoice = getComputerChoice();
-        playRound(computerChoice, playerChoice);
-    }
+function tryAgain(){
+    if(playerScore >= 5){
+        const p = document.createElement("p");
+        const btn = document.createElement("button");
 
+        p.innerHTML = "<p>5点先取！きみの勝ち！<br>もう一度遊ぶ？</p>"
+
+        div.appendChild(p)
+        div.appendChild(btn)
+    }
 }
 
-playGame(5);
+
+const btns = document.querySelectorAll(".hands"); 
+
+// 各ボタンにイベントトリガーを設置、押下でplayRoundを行う
+btns.forEach(btn => {
+  btn.addEventListener("click", (event) => {
+    comChoice = getComChoice();
+    playerChoice = event.target.value;
+
+    playRound(comChoice, playerChoice);
+  });
+});
