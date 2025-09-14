@@ -20,6 +20,11 @@ button {
     font-size: 16px;
     font-weight: bold;
     color: darkslategray;
+    transition-duration: .4s;
+}
+
+button:hover {
+  transform: scale(1.1);
 }
 
 p {
@@ -29,7 +34,7 @@ p {
 .title {
     padding: 64px;
     text-align: center;
-    font-size: 48px;
+    font-size: 32px;
     color: chocolate;
 }
 

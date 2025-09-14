@@ -47,32 +47,41 @@ function printResult() {
         div.innerHTML = `
             <p>ママは ${comChoice}！ きみの勝ちだね。<br>
             きみの得点：${playerScore}点 ママの得点：${computerScore}点</p>`;
+        tryAgain(5);
     } else if (winner === "com") {
         computerScore += 1;
         div.innerHTML = `
             <p>ママは ${comChoice}！ ママの勝ちだね。<br>
             きみの得点：${playerScore}点 ママの得点：${computerScore}点</p>`;
+        tryAgain(5)
     } else {
         div.innerHTML = `<p>あいこだよ、もう一回やってみよう！</p>`;
     }
 }
 
-function tryAgain(){
-    if(playerScore >= 5){
+//5点先取した時点でゲーム終了、リプレイするか確認
+function tryAgain(times){
+    if(playerScore >= times || computerScore >= times){
+
+        //結果表示
         const p = document.createElement("p");
-        const btn = document.createElement("button");
-
-        p.innerHTML = "<p>5点先取！きみの勝ち！<br>もう一度遊ぶ？</p>"
-
+        p.innerHTML = 
+                        `<p>5点先取！${winner}の勝ち！<br>もう一度遊ぶ？</p>
+                        <button class="replaybtn">はい</button>`
         div.appendChild(p)
-        div.appendChild(btn)
+
+        //リプレイボタンを押すとスコアリセットして初期画面へ
+        const replayBtn = document.querySelector(".replaybtn")
+        replayBtn.addEventListener("click", () =>{
+            playerScore = 0;
+            computerScore = 0;
+            div.innerHTML = "";
+        });
     }
 }
 
-
+// 各手ボタンにイベントトリガーを設置、押下でplayRoundを行う
 const btns = document.querySelectorAll(".hands"); 
-
-// 各ボタンにイベントトリガーを設置、押下でplayRoundを行う
 btns.forEach(btn => {
   btn.addEventListener("click", (event) => {
     comChoice = getComChoice();
